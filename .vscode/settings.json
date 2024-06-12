@@ -1,6 +1,15 @@
 {
-    "workbench.colorCustomizations": {
-        "minimap.background": "#00000000",
-        "scrollbar.shadow": "#00000000"
-    }
+  "eslint.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "html"
+  ],
+  "workbench.colorCustomizations": {
+    "minimap.background": "#00000000",
+    "scrollbar.shadow": "#00000000"
+  }
 }
