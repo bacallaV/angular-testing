@@ -7,6 +7,7 @@ import { ProductsService } from './products.service';
 import { Product } from '../interfaces/product.interface';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
+import { generateManyProducts } from '../interfaces/product.mock';
 
 fdescribe('ProductsService', () => {
   let service: ProductsService;
@@ -30,18 +31,7 @@ fdescribe('ProductsService', () => {
   describe('getAll()', () => {
     it('should return a product list', async () => {
       // Arrange
-      const mockData: Product[] = [{
-        id: '123',
-        title: 'title',
-        price: 123,
-        description: 'description',
-        category: {
-          id: 123,
-          name: 'name',
-        },
-        images: ['img1', 'img2'],
-        taxes: 123 * .19,
-      }];
+      const mockData: Product[] = generateManyProducts(3);
       const product$ = service.getAll();
       const productPromise = firstValueFrom(product$);
 
