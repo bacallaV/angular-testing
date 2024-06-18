@@ -22,7 +22,7 @@ export class ProductsService {
 
     if (limit != null && limit != undefined && offset != null && offset != undefined) {
       params = params.append('limit', limit);
-      params = params.append('offset', limit);
+      params = params.append('offset', offset);
     }
 
     return this.httpClient.get<Product[]>(this.apiUrl, { params })
@@ -31,7 +31,7 @@ export class ProductsService {
       map(products => products.map(item => {
         return {
           ...item,
-          taxes: .19 * item.price
+          taxes: item.price > 0 ? .19 * item.price : 0,
         };
       }))
     );
