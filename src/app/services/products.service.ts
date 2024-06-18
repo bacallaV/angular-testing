@@ -48,16 +48,17 @@ export class ProductsService {
     return this.httpClient.get<Product>(`${this.apiUrl}/${id}`)
     .pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === HttpStatusCode.Conflict) {
-          return throwError('Algo esta fallando en el server');
-        }
-        if (error.status === HttpStatusCode.NotFound) {
-          return throwError('El producto no existe');
-        }
-        if (error.status === HttpStatusCode.Unauthorized) {
-          return throwError('No estas permitido');
-        }
-        return throwError('Ups algo salio mal');
+        if (error.status === HttpStatusCode.Conflict) return throwError(
+          () => 'Algo esta fallando en el server'
+        );
+        if (error.status === HttpStatusCode.NotFound) return throwError(
+          () => 'El producto no existe'
+        );
+        if (error.status === HttpStatusCode.Unauthorized) return throwError(
+          () => 'No estas permitido'
+        );
+
+        return throwError(() => 'Ups algo salio mal');
       })
     );
   }

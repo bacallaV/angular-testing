@@ -114,6 +114,55 @@ fdescribe('ProductsService', () => {
     });
   });
 
+  describe('getOne()', () => {
+    it('should return a product', async () => {
+      // Arrange
+      const mockData = generateOneProduct();
+      const productId = mockData.id;
+
+      // Act
+      const servicePromise = firstValueFrom(
+        service.getOne(productId)
+      );
+      const req = httpTesting.expectOne({
+        method: 'GET',
+        url: `${API_URL}/${productId}`,
+      });
+
+      req.flush(mockData);
+      const serviceResponse = await servicePromise;
+
+      // Assert
+      expect(serviceResponse).toEqual(mockData);
+    });
+
+    it('should return error message for status code 404', (doneFn: DoneFn) => {
+      // Arrange
+      const productId = '1';
+      const errorMsg = 'El producto no existe';
+      const mockError = {
+        status: 404,
+        statusText: errorMsg,
+      };
+
+      // Act
+      service.getOne(productId).subscribe({
+        error: (err: string) => {
+          // Assert
+          expect(err).toEqual(errorMsg);
+          doneFn();
+        },
+      });
+
+      const req = httpTesting.expectOne({
+        method: 'GET',
+        url: `${API_URL}/${productId}`,
+      });
+
+      req.flush(errorMsg, mockError);
+    });
+  });
+
   describe('create()', () => {
     it('should create a product', async () => {
       // Arrange
