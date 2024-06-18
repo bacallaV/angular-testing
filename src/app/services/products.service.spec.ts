@@ -209,6 +209,28 @@ fdescribe('ProductsService', () => {
     });
   });
 
+  describe('delete()', () => {
+    it('should delete a product', async () => {
+      // Arrange
+      const productId = generateOneProduct().id;
+
+      // Act
+      const servicePromise = firstValueFrom(
+        service.delete(productId)
+      );
+      const req = httpTesting.expectOne({
+        method: 'DELETE',
+        url: `${API_URL}/${productId}`,
+      });
+
+      req.flush(true);
+      const serviceResponse = await servicePromise;
+
+      // Assert
+      expect(serviceResponse).toBeTrue();
+    });
+  });
+
   afterEach(() => {
     // Verify that none of the tests make any extra HTTP requests.
     TestBed.inject(HttpTestingController).verify();
