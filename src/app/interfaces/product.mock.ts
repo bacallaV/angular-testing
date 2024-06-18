@@ -17,7 +17,7 @@ export const generateOneProduct = (): Product => {
       faker.image.url(),
       faker.image.url(),
     ],
-    taxes: price * .19,
+    taxes: price > 0 ? price * .19 : 0,
   };
 };
 
