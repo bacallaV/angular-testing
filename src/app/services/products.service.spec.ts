@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { ProductsService } from './products.service';
 
@@ -8,21 +8,30 @@ import { CreateProductDTO, Product, UpdateProductDTO } from '../interfaces/produ
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { generateManyProducts, generateOneProduct } from '../interfaces/product.mock';
+import { tokenInterceptor } from '../interceptors/token/token.interceptor';
+import { TokenService } from './token/token.service';
 
 fdescribe('ProductsService', () => {
   let service: ProductsService;
   let httpTesting: HttpTestingController;
+  let tokenService: TokenService;
+
   const API_URL = `${environment.API_URL}/products`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        provideHttpClient(
+          withInterceptors([
+            tokenInterceptor,
+          ])
+        ),
         provideHttpClientTesting(),
       ],
     });
     service = TestBed.inject(ProductsService);
     httpTesting = TestBed.inject(HttpTestingController);
+    tokenService = TestBed.inject(TokenService);
   });
 
   it('should be created', () => {
@@ -133,6 +142,30 @@ fdescribe('ProductsService', () => {
       const serviceResponse = await servicePromise;
 
       // Assert
+      expect(serviceResponse).toEqual(mockData);
+    });
+
+    it('should have bearer token', async () => {
+      // Arrange
+      const mockData = generateOneProduct();
+      const productId = mockData.id;
+      const mockToken = '123';
+      spyOn(tokenService, 'getToken').and.returnValue(mockToken);
+
+      // Act
+      const servicePromise = firstValueFrom(
+        service.getOne(productId)
+      );
+      const req = httpTesting.expectOne({
+        method: 'GET',
+        url: `${API_URL}/${productId}`,
+      });
+
+      req.flush(mockData);
+      const serviceResponse = await servicePromise;
+
+      // Assert
+      expect(req.request.headers.get('Authorization')).toEqual(`Bearer ${mockToken}`);
       expect(serviceResponse).toEqual(mockData);
     });
 
