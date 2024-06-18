@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { ProductsService } from './products.service';
 
-import { Product } from '../interfaces/product.interface';
+import { CreateProductDTO, Product } from '../interfaces/product.interface';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { generateManyProducts, generateOneProduct } from '../interfaces/product.mock';
@@ -12,7 +12,7 @@ import { generateManyProducts, generateOneProduct } from '../interfaces/product.
 fdescribe('ProductsService', () => {
   let service: ProductsService;
   let httpTesting: HttpTestingController;
-  const GET_ALL_API_URL = `${environment.API_URL}/products`;
+  const API_URL = `${environment.API_URL}/products`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,7 +37,7 @@ fdescribe('ProductsService', () => {
       const productPromise = firstValueFrom(product$);
 
       const req = httpTesting
-        .expectOne(GET_ALL_API_URL, 'Request to get all products');
+        .expectOne(API_URL, 'Request to get all products');
 
       // Assert: se pueden hacer varias aserciones del método.
       expect(req.request.method).toBe('GET');
@@ -55,8 +55,6 @@ fdescribe('ProductsService', () => {
       const products = await productPromise;
       expect(products).toEqual(mockData);
       expect(products).toHaveSize(mockData.length);
-
-      httpTesting.verify();
     });
 
     it('should return taxes equals to 0', async () => {
@@ -78,7 +76,7 @@ fdescribe('ProductsService', () => {
       const req = httpTesting
         .expectOne({
           method: 'GET',
-          url: GET_ALL_API_URL
+          url: API_URL
         }, 'Request to get all products');
 
       // Esto provoca que la consulta sea completada, devolviendo el resultado.
@@ -89,8 +87,6 @@ fdescribe('ProductsService', () => {
 
       expect(products[0].taxes).toEqual(0);
       expect(products[1].taxes).toEqual(0);
-
-      httpTesting.verify();
     });
 
     it('should add query parameters', async () => {
@@ -106,7 +102,7 @@ fdescribe('ProductsService', () => {
       // Assert
       const req = httpTesting.expectOne({
         method: 'GET',
-        url: `${GET_ALL_API_URL}?limit=${limit}&offset=${offset}`,
+        url: `${API_URL}?limit=${limit}&offset=${offset}`,
       });
 
       req.flush(mockData);
@@ -115,8 +111,37 @@ fdescribe('ProductsService', () => {
       const params = req.request.params;
       expect(params.get('limit')).toEqual(limit.toString());
       expect(params.get('offset')).toEqual(offset.toString());
+    });
+  });
 
-      httpTesting.verify();
+  describe('create()', () => {
+    it('should create a product', async () => {
+      // Arrange
+      const mockData = generateOneProduct();
+      const productDto: CreateProductDTO = {
+        title: mockData.title,
+        price: mockData.price,
+        images: mockData.images,
+        description: mockData.description,
+        categoryId: 1,
+        taxes: mockData.taxes,
+      };
+
+      // Act
+      const productPromise = firstValueFrom(
+        service.create({...productDto})
+      );
+      const req = httpTesting.expectOne({
+        method: 'POST',
+        url: API_URL,
+      });
+
+      req.flush(mockData);
+      const serviceResponse = await productPromise;
+
+      // Assert
+      expect(serviceResponse).toEqual(mockData);
+      expect(req.request.body).toEqual(productDto);
     });
   });
 
