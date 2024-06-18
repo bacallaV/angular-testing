@@ -84,6 +84,9 @@ importers:
       karma-jasmine-html-reporter:
         specifier: ~2.1.0
         version: 2.1.0(jasmine-core@5.1.2)(karma-jasmine@5.1.0(karma@6.4.3))(karma@6.4.3)
+      karma-safari-launcher:
+        specifier: ^1.0.0
+        version: 1.0.0(karma@6.4.3)
       typescript:
         specifier: ~5.4.2
         version: 5.4.5
@@ -3188,6 +3191,11 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       karma: ^6.0.0
+
+  karma-safari-launcher@1.0.0:
+    resolution: {integrity: sha512-qmypLWd6F2qrDJfAETvXDfxHvKDk+nyIjpH9xIeI3/hENr0U3nuqkxaftq73PfXZ4aOuOChA6SnLW4m4AxfRjQ==}
+    peerDependencies:
+      karma: '>=0.9'
 
   karma-source-map-support@1.4.0:
     resolution: {integrity: sha512-RsBECncGO17KAoJCYXjv+ckIz+Ii9NCi+9enk+rq6XC81ezYkb4/RHE6CTXdA7IOJqoF3wcaLfVG0CPmE5ca6A==}
@@ -8160,6 +8168,10 @@ snapshots:
   karma-jasmine@5.1.0(karma@6.4.3):
     dependencies:
       jasmine-core: 4.6.1
+      karma: 6.4.3
+
+  karma-safari-launcher@1.0.0(karma@6.4.3):
+    dependencies:
       karma: 6.4.3
 
   karma-source-map-support@1.4.0:
