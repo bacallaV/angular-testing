@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { ProductsService } from './products.service';
 
-import { CreateProductDTO, Product } from '../interfaces/product.interface';
+import { CreateProductDTO, Product, UpdateProductDTO } from '../interfaces/product.interface';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { generateManyProducts, generateOneProduct } from '../interfaces/product.mock';
@@ -142,6 +142,70 @@ fdescribe('ProductsService', () => {
       // Assert
       expect(serviceResponse).toEqual(mockData);
       expect(req.request.body).toEqual(productDto);
+    });
+  });
+
+  describe('update()', () => {
+    it('should update a product', async () => {
+      // Arrange
+      const mockData = generateOneProduct();
+      const productToUpdate: UpdateProductDTO = {
+        title: '',
+        price: 45,
+      };
+
+      // Act
+      const servicePromise = firstValueFrom(
+        service.update(
+          mockData.id,
+          {...productToUpdate}
+        )
+      );
+      const req = httpTesting.expectOne({
+        method: 'PUT',
+        url: `${API_URL}/${mockData.id}`,
+      });
+
+      req.flush({
+        ...mockData,
+        ...productToUpdate,
+      });
+      const serviceResponse = await servicePromise;
+
+      // Assert
+      expect(req.request.body).toEqual(productToUpdate);
+      expect(serviceResponse).toEqual({
+        ...mockData,
+        ...productToUpdate,
+      });
+    });
+
+    it('should not to update a product', async () => {
+      // Arrange
+      const mockData = generateOneProduct();
+      const productToUpdate: UpdateProductDTO = {};
+
+      // Act
+      const servicePromise = firstValueFrom(
+        service.update(
+          mockData.id,
+          {...productToUpdate}
+        )
+      );
+      const req = httpTesting.expectOne({
+        method: 'PUT',
+        url: `${API_URL}/${mockData.id}`,
+      });
+
+      req.flush({
+        ...mockData,
+        ...productToUpdate,
+      });
+      const serviceResponse = await servicePromise;
+
+      // Assert
+      expect(req.request.body).toEqual(productToUpdate);
+      expect(serviceResponse).toEqual(mockData);
     });
   });
 
