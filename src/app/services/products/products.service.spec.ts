@@ -4,12 +4,12 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { ProductsService } from './products.service';
 
-import { CreateProductDTO, Product, UpdateProductDTO } from '../interfaces/product.interface';
-import { environment } from '../../environments/environment';
+import { CreateProductDTO, Product, UpdateProductDTO } from '../../interfaces/product.interface';
+import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
-import { generateManyProducts, generateOneProduct } from '../interfaces/product.mock';
-import { tokenInterceptor } from '../interceptors/token/token.interceptor';
-import { TokenService } from './token/token.service';
+import { generateManyProducts, generateOneProduct } from '../../interfaces/product.mock';
+import { tokenInterceptor } from '../../interceptors/token/token.interceptor';
+import { TokenService } from '../token/token.service';
 
 fdescribe('ProductsService', () => {
   let service: ProductsService;
