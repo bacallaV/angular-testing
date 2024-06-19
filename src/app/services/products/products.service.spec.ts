@@ -11,7 +11,7 @@ import { generateManyProducts, generateOneProduct } from '../../interfaces/produ
 import { tokenInterceptor } from '../../interceptors/token/token.interceptor';
 import { TokenService } from '../token/token.service';
 
-fdescribe('ProductsService', () => {
+describe('ProductsService', () => {
   let service: ProductsService;
   let httpTesting: HttpTestingController;
   let tokenService: TokenService;
