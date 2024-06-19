@@ -8,7 +8,7 @@ import { TokenService } from '../token/token.service';
 import { Auth } from '../../interfaces/auth.interface';
 import { firstValueFrom } from 'rxjs';
 
-fdescribe('AuthService', () => {
+describe('AuthService', () => {
   let service: AuthService;
 
   let tokenService: TokenService;
