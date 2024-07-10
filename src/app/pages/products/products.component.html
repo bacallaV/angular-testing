@@ -9,4 +9,24 @@
       </app-product>
     }
   </div>
+
+  <button
+    type="button"
+    [disabled]="status === 'loading' || status === 'error' || status === 'no-more-products'"
+    (click)="getPaginatedProducts()">
+    @switch (status) {
+      @case ('success') {
+        <span>Cargar más</span>
+      }
+      @case ('loading') {
+        <span>Cargando...</span>
+      }
+      @case ('error') {
+        <span>Ocurrió un error</span>
+      }
+      @case ('no-more-products') {
+        <span>No existen más productos</span>
+      }
+    }
+  </button>
 </section>
