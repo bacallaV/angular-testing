@@ -27,7 +27,7 @@ export class ProductsComponent implements OnInit {
 
   constructor(private readonly productsService: ProductsService) {
     this.products = [];
-    this.status = 'success';
+    this.status = 'loading';
   }
 
   ngOnInit(): void {

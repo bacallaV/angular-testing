@@ -12,6 +12,7 @@
 
   <button
     type="button"
+    class="btn-primary"
     [disabled]="status === 'loading' || status === 'error' || status === 'no-more-products'"
     (click)="getPaginatedProducts()">
     @switch (status) {
