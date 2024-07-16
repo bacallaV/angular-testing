@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { HighlightDirective } from '../../directives/highlight.directive';
+import { ReversePipe } from '../../pipes/reverse.pipe';
 
 @Component({
   selector: 'app-highlight',
   standalone: true,
-  imports: [FormsModule, HighlightDirective],
+  imports: [FormsModule, HighlightDirective, ReversePipe],
   template: `
     <p appHighlight>
 			Highlight default
@@ -21,7 +22,7 @@ import { HighlightDirective } from '../../directives/highlight.directive';
 		</p>
 
 		<p>
-			Otro párrafo
+			{{color | reverse}}
 		</p>
 
 		<input
