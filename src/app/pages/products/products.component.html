@@ -3,12 +3,31 @@
 
   <div class="my-grid">
     @for (product of products; track $index) {
-      <figure>
-        <img [src]="product.images[0]" alt="Producto">
-        <figcaption>
-          {{ product.title }} - {{ product.price }}
-        </figcaption>
-      </figure>
+      <app-product
+        [product]="products[$index]"
+        (onselected)="onSelectedProduct($event)">
+      </app-product>
     }
   </div>
+
+  <button
+    type="button"
+    class="btn-primary"
+    [disabled]="status === 'loading' || status === 'error' || status === 'no-more-products'"
+    (click)="getPaginatedProducts()">
+    @switch (status) {
+      @case ('success') {
+        <span>Cargar más</span>
+      }
+      @case ('loading') {
+        <span>Cargando...</span>
+      }
+      @case ('error') {
+        <span>Ocurrió un error</span>
+      }
+      @case ('no-more-products') {
+        <span>No existen más productos</span>
+      }
+    }
+  </button>
 </section>

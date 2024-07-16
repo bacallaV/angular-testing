@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { PicoPreviewComponent } from './pages/pico-preview/pico-preview.component';
 import { ProductsComponent } from './pages/products/products.component';
+import { HighlightComponent } from './pages/highlight/highlight.component';
 
 export const routes: Routes = [
   {
@@ -16,5 +17,9 @@ export const routes: Routes = [
   {
     path: 'products',
     component: ProductsComponent,
+  },
+  {
+    path: 'highlight-directive',
+    component: HighlightComponent,
   },
 ];
