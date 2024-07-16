@@ -8,7 +8,7 @@ import { generateManyProducts } from '../../interfaces/product.mock';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-fdescribe('ProductsComponent', () => {
+describe('ProductsComponent', () => {
   let component: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productsService: jasmine.SpyObj<ProductsService>;
