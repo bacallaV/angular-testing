@@ -1,5 +1,4 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { DebugElement } from '@angular/core';
 
 import * as Testing from '../../../testing';
 
@@ -11,7 +10,6 @@ describe('ProductsComponent', () => {
   let component: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productsService: jasmine.SpyObj<ProductsService>;
-  let buttonEl: DebugElement;
 
   beforeEach(() => {
     productsService = jasmine.createSpyObj('ProductsService', ['getAll']);
@@ -28,8 +26,6 @@ describe('ProductsComponent', () => {
     fixture = TestBed.createComponent(ProductsComponent);
     fixture.autoDetectChanges();
     component = fixture.componentInstance;
-
-    buttonEl = Testing.queryByCSS(fixture, 'button');
   });
 
   it('should create', () => {
@@ -103,10 +99,9 @@ describe('ProductsComponent', () => {
       productsService.getAll.and.returnValue(
         Testing.deferredResolve(productsMock)
       );
-      buttonEl = Testing.queryByCSS(fixture, '.btn-primary');
 
       // Act
-      buttonEl.triggerEventHandler('click');
+      Testing.clickEvent(fixture, '.btn-primary');
 
       expect(component.status).toEqual('loading');
 

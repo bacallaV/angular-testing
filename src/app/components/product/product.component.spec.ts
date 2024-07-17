@@ -105,9 +105,7 @@ describe('TestHostComponent', () => {
   });
 
   it('should receive Product after click', () => {
-    const button = debugElement.query(By.css('button'));
-
-    button.triggerEventHandler('click');
+    Testing.clickEvent(fixture, 'button');
 
     expect(component.selectedProduct).toEqual(component.product);
   });
