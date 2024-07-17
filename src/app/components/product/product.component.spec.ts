@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 
 import { first } from 'rxjs';
 
+import * as Testing from '../../../testing';
+
 import { ProductComponent } from './product.component';
 import { Product } from '../../interfaces/product.interface';
 import * as ProductMock from '../../interfaces/product.mock';
@@ -11,7 +13,6 @@ import * as ProductMock from '../../interfaces/product.mock';
 describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
-  let debugElement: DebugElement;
   let testProduct: Product;
 
   beforeEach(async () => {
@@ -23,7 +24,6 @@ describe('ProductComponent', () => {
     fixture = TestBed.createComponent(ProductComponent);
     component = fixture.componentInstance;
 
-    debugElement = fixture.debugElement;
     testProduct = ProductMock.generateOneProduct();
     component.product = testProduct;
 
@@ -32,7 +32,6 @@ describe('ProductComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(debugElement).toBeTruthy();
   });
 
   it('should have stored the same Product', () => {
@@ -40,19 +39,19 @@ describe('ProductComponent', () => {
   });
 
   it('should have an image', () => {
-    const img: HTMLElement = debugElement.query( By.css('img') ).nativeElement;
+    const img: HTMLElement = Testing.queryByCSS(fixture, 'img').nativeElement;
     expect(img).toBeTruthy();
   });
 
   it('should have a figcaption with "{title} - {price}"', () => {
     const figcaptionDescription = `${testProduct.title} - ${testProduct.price}`;
-    const figcaption: HTMLElement = debugElement.query( By.css('figcaption') ).nativeElement;
+    const figcaptionText = Testing.getTextByCSSQuery(fixture, 'figcaption');
 
-    expect(figcaption.textContent).toEqual(figcaptionDescription);
+    expect(figcaptionText).toEqual(figcaptionDescription);
   });
 
   it('should emit #onselected when button is clicked', () => {
-    const button = debugElement.query( By.css('button') );
+    const button = Testing.queryByCSS(fixture, 'button');
 
     component.onselected.pipe(first()).subscribe({
       next: (product: Product) => {

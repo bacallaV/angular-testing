@@ -1,8 +1,9 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 
 import { FormsModule } from '@angular/forms';
+
+import * as Testing from '../../testing';
 
 import { ReversePipe } from './reverse.pipe';
 
@@ -36,7 +37,6 @@ class TestHostComponent {
 describe('ReversePipe in TestHostComponent', () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let debugElement: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -46,7 +46,6 @@ describe('ReversePipe in TestHostComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
 
     fixture.autoDetectChanges();
   });
@@ -56,14 +55,14 @@ describe('ReversePipe in TestHostComponent', () => {
   });
 
   it('should transform <h5>', () => {
-    const h5: HTMLElement = debugElement.query(By.css('h5')).nativeElement;
+    const h5: HTMLElement = Testing.queryByCSS(fixture, 'h5').nativeElement;
 
     expect(h5.textContent).toEqual('otisrolav');
   });
 
   it('should transform reactively with <input>', () => {
-    const input: HTMLInputElement = debugElement.query(By.css('input')).nativeElement;
-    const p: HTMLElement = debugElement.query(By.css('p')).nativeElement;
+    const input: HTMLInputElement = Testing.queryByCSS(fixture, 'input').nativeElement;
+    const p: HTMLElement = Testing.queryByCSS(fixture, 'p').nativeElement;
 
     expect(p.textContent).withContext('initial value').toEqual('');
 
