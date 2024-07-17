@@ -33,3 +33,7 @@ export function queryByDirective<T, D>(fixture: ComponentFixture<T>, directive: 
 export function queryAllByDirective<T, D>(fixture: ComponentFixture<T>, directive: Type<D>): DebugElement[] {
   return queryAll(fixture, By.directive(directive));
 }
+
+export function getTextByCSSQuery<T>(fixture: ComponentFixture<T>, selector: string): string | null {
+  return (query(fixture, By.css(selector)).nativeElement as HTMLElement).textContent;
+}
