@@ -1,12 +1,13 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { defer, of } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+
+import * as Testing from '../../../testing';
 
 import { ProductsComponent } from './products.component';
 import { ProductsService } from '../../services/products/products.service';
 import { generateManyProducts } from '../../interfaces/product.mock';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 
 describe('ProductsComponent', () => {
   let component: ProductsComponent;
@@ -17,7 +18,7 @@ describe('ProductsComponent', () => {
   beforeEach(() => {
     productsService = jasmine.createSpyObj('ProductsService', ['getAll']);
     const mockProducts = generateManyProducts(10);
-    productsService.getAll.and.returnValue( of(mockProducts) );
+    productsService.getAll.and.returnValue( Testing.mockObservable(mockProducts) );
 
     TestBed.configureTestingModule({
       imports: [ProductsComponent],
@@ -48,7 +49,7 @@ describe('ProductsComponent', () => {
       // Arrange
       const productsMock = generateManyProducts(10);
       productsService.getAll.and.returnValue(
-        defer( () => Promise.resolve(productsMock) ),
+        Testing.deferredResolve(productsMock)
       );
 
       // Act
@@ -67,7 +68,7 @@ describe('ProductsComponent', () => {
     it('should should change status from "loading" to "no-more-products"', fakeAsync(() => {
       // Arrange
       productsService.getAll.and.returnValue(
-        defer( () => Promise.resolve([]) ),
+        Testing.deferredResolve([])
       );
 
       // Act
@@ -84,7 +85,7 @@ describe('ProductsComponent', () => {
     it('should should change status from "loading" to "error"', fakeAsync(() => {
       // Arrange
       productsService.getAll.and.returnValue(
-        defer( () => Promise.reject('Error') ),
+        Testing.deferredReject('Error')
       );
 
       // Act
@@ -102,7 +103,7 @@ describe('ProductsComponent', () => {
       // Arrange
       const productsMock = generateManyProducts(10);
       productsService.getAll.and.returnValue(
-        defer( () => Promise.resolve(productsMock) ),
+        Testing.deferredResolve(productsMock)
       );
       buttonEl = fixture.debugElement.query(By.css('.btn-primary'));
 
