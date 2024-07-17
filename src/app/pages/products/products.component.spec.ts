@@ -1,6 +1,4 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-
-import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import * as Testing from '../../../testing';
@@ -31,7 +29,7 @@ describe('ProductsComponent', () => {
     fixture.autoDetectChanges();
     component = fixture.componentInstance;
 
-    buttonEl = fixture.debugElement.query(By.css('button'));
+    buttonEl = Testing.queryByCSS(fixture, 'button');
   });
 
   it('should create', () => {
@@ -105,7 +103,7 @@ describe('ProductsComponent', () => {
       productsService.getAll.and.returnValue(
         Testing.deferredResolve(productsMock)
       );
-      buttonEl = fixture.debugElement.query(By.css('.btn-primary'));
+      buttonEl = Testing.queryByCSS(fixture, '.btn-primary');
 
       // Act
       buttonEl.triggerEventHandler('click');
@@ -118,7 +116,7 @@ describe('ProductsComponent', () => {
       // Assert
       expect(component.status).toEqual('success');
 
-      const productEls = fixture.debugElement.queryAll(By.css('app-product'));
+      const productEls = Testing.queryAllByCSS(fixture, 'app-product');
       expect(productEls.length).toEqual(component.products.length);
     }));
   });

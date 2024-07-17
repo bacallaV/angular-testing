@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import * as Testing from '../../testing';
+
 import { HighlightDirective } from './highlight.directive';
-import { By } from '@angular/platform-browser';
 
 /**
  * Tests with father TestHostComponent
@@ -63,15 +64,15 @@ describe('HighlightDirective', () => {
     // const highlightElements = fixture.debugElement.queryAll(By.css('*[appHighlight]'));
 
     // Opt 2 to get elements with #HighlightDirective ✅
-    const highlightElements = fixture.debugElement.queryAll(By.directive(HighlightDirective));
-    const notHighlightElements = fixture.debugElement.queryAll(By.css('*:not([appHighlight])'));
+    const highlightElements = Testing.queryAllByDirective(fixture, HighlightDirective);
+    const notHighlightElements = Testing.queryAllByCSS(fixture, '*:not([appHighlight])');
 
     expect(highlightElements.length).toEqual(4);
     expect(notHighlightElements.length).toEqual(2);
   });
 
   it('should have the first element with #HighlightDirective with default color', () => {
-    const firstElWithDirective = fixture.debugElement.queryAll(By.directive(HighlightDirective))[0];
+    const firstElWithDirective = Testing.queryAllByDirective(fixture, HighlightDirective)[0];
     // Getting the Directive from DebugElement
     const directive = firstElWithDirective.injector.get(HighlightDirective);
 
@@ -79,7 +80,7 @@ describe('HighlightDirective', () => {
   });
 
   it('should bind <input> and change color', () => {
-    const inputElement: HTMLInputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    const inputElement: HTMLInputElement = Testing.queryByCSS(fixture, 'input').nativeElement;
     const newColor = 'pink';
 
     expect(inputElement.style['backgroundColor']).toEqual(component.color);
