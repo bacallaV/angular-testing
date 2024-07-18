@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { Product } from './product.interface';
+import { Product } from '@shared/interfaces';
 
 export const generateOneProduct = (): Product => {
   const price = parseInt(faker.commerce.price());

@@ -1,39 +1,35 @@
-import { DebugElement, Predicate, Type } from '@angular/core';
+import { DebugElement, Type } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-function query<T>(fixture: ComponentFixture<T>, predicate: Predicate<DebugElement>): DebugElement {
-  const debugElement = fixture.debugElement.query(predicate);
-
-  if(!debugElement) throw new Error(`${predicate} not found`);
-
-  return debugElement;
-}
-
-function queryAll<T>(fixture: ComponentFixture<T>, predicate: Predicate<DebugElement>): DebugElement[] {
-  const debugElement = fixture.debugElement.queryAll(predicate);
-
-  if(!debugElement) throw new Error(`${predicate} not found`);
-
-  return debugElement;
-}
-
 export function queryByCSS<T>(fixture: ComponentFixture<T>, selector: string): DebugElement {
-  return query(fixture, By.css(selector));
+  const debugElement = fixture.debugElement.query(By.css(selector));
+
+  return debugElement;
 }
 
 export function queryAllByCSS<T>(fixture: ComponentFixture<T>, selector: string): DebugElement[] {
-  return queryAll(fixture, By.css(selector));
+  const debugElement = fixture.debugElement.queryAll(By.css(selector));
+
+  return debugElement;
 }
 
 export function queryByDirective<T, D>(fixture: ComponentFixture<T>, directive: Type<D>): DebugElement {
-  return query(fixture, By.directive(directive));
+  const debugElement = fixture.debugElement.query(By.directive(directive));
+
+  return debugElement;
 }
 
 export function queryAllByDirective<T, D>(fixture: ComponentFixture<T>, directive: Type<D>): DebugElement[] {
-  return queryAll(fixture, By.directive(directive));
+  const debugElement = fixture.debugElement.queryAll(By.directive(directive));
+
+  return debugElement;
 }
 
 export function getTextByCSSQuery<T>(fixture: ComponentFixture<T>, selector: string): string | null {
-  return (query(fixture, By.css(selector)).nativeElement as HTMLElement).textContent;
+  const debugElement = fixture.debugElement.query(By.css(selector));
+
+  if(!debugElement) throw new Error(`getTextByCSSQuery(): ${selector} not found}`);
+
+  return (debugElement.nativeElement as HTMLElement).textContent;
 }

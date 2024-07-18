@@ -13,9 +13,25 @@ export function clickElement<T>(fixture: ComponentFixture<T>, selector: string):
   element.click();
 }
 
-export function inputData<T>(fixture: ComponentFixture<T>, selector: string, value: string): void {
-  const input: HTMLInputElement = queryByCSS(fixture, selector).nativeElement;
+export function inputData<T>(fixture: ComponentFixture<T>, selector: string, value: string): void;
+export function inputData<T>(fixture: ComponentFixture<T>, selector: string, value: boolean): void;
+export function inputData<T>(fixture: ComponentFixture<T>, selector: string, value: string | boolean): void {
+  const inputDe = queryByCSS(fixture, selector);
 
-  input.value = value;
-  input.dispatchEvent(new Event('input'));
+  if(!inputDe) throw new Error(`inputData(): ${selector} input element not found`);
+
+  if (typeof value === 'string')
+    (inputDe.nativeElement as HTMLInputElement).value = value;
+  else if (typeof value === 'boolean')
+    (inputDe.nativeElement as HTMLInputElement).checked = true;
+
+  (inputDe.nativeElement as HTMLInputElement).dispatchEvent(new Event('input'));
+}
+
+export function dispatchEvent<T>(fixture: ComponentFixture<T>, selector: string, eventName: string): void {
+  const debugElement = queryByCSS(fixture, selector);
+
+  if(!debugElement) throw new Error(`dispatchEvent(): ${selector} not found`);
+
+  (debugElement.nativeElement as HTMLElement).dispatchEvent(new Event(eventName));
 }
