@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AuthService } from './auth.service';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { environment } from '../../../environments/environment';
-import { TokenService } from '../token/token.service';
-import { Auth } from '../../interfaces/auth.interface';
+
 import { firstValueFrom } from 'rxjs';
+
+import { AuthService } from './auth.service';
+
+import { environment } from '@environments/environment';
+import { TokenService } from '@core/services';
+import { Auth } from '@shared/interfaces';
 
 describe('AuthService', () => {
   let service: AuthService;

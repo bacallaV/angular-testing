@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { HighlightDirective } from '../../directives/highlight.directive';
-import { ReversePipe } from '../../pipes/reverse.pipe';
+import { HighlightDirective } from '@core/directives/highlight.directive';
+import { ReversePipe } from '@core/pipes/reverse.pipe';
 
 @Component({
   selector: 'app-highlight',

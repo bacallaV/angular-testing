@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormsModule } from '@angular/forms';
 
-import * as Testing from '../../testing';
+import * as Testing from '@testing/index';
 
 import { ReversePipe } from './reverse.pipe';
 

@@ -4,12 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { switchMap, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
-
-import { Auth } from '../../interfaces/auth.interface';
-import { User } from '../../interfaces/user.interface';
-
-import { TokenService } from '../token/token.service';
+import { environment } from '@environments/environment';
+import { Auth, User } from '@shared/interfaces';
+import { TokenService } from '@core/services';
 
 @Injectable({
   providedIn: 'root'

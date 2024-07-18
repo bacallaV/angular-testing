@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
 
 import { first } from 'rxjs';
 
-import * as Testing from '../../../testing';
+import * as Testing from '@testing/index';
+import * as ProductMock from '@testing/mock';
 
 import { ProductComponent } from './product.component';
-import { Product } from '../../interfaces/product.interface';
-import * as ProductMock from '../../interfaces/product.mock';
+
+import { Product } from '@shared/interfaces';
 
 describe('ProductComponent', () => {
   let component: ProductComponent;

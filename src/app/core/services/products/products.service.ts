@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+
 import { retry, catchError, map } from 'rxjs/operators';
 import { Observable, throwError, zip } from 'rxjs';
 
-import { Product, CreateProductDTO, UpdateProductDTO } from '../../interfaces/product.interface';
-import { environment } from '../../../environments/environment';
+import { environment } from '@environments/environment';
+
+import { Product, CreateProductDTO, UpdateProductDTO } from '@shared/interfaces';
 
 @Injectable({
   providedIn: 'root'

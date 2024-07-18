@@ -1,10 +1,10 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import * as Testing from '../../../testing';
+import * as Testing from '@testing/index';
 
 import { ProductsComponent } from './products.component';
-import { ProductsService } from '../../services/products/products.service';
-import { generateManyProducts } from '../../interfaces/product.mock';
+import { ProductsService } from '@core/services';
+import { generateManyProducts } from '@testing/mock';
 
 describe('ProductsComponent', () => {
   let component: ProductsComponent;

@@ -2,14 +2,16 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
+import { firstValueFrom } from 'rxjs';
+
 import { ProductsService } from './products.service';
 
-import { CreateProductDTO, Product, UpdateProductDTO } from '../../interfaces/product.interface';
-import { environment } from '../../../environments/environment';
-import { firstValueFrom } from 'rxjs';
-import { generateManyProducts, generateOneProduct } from '../../interfaces/product.mock';
-import { tokenInterceptor } from '../../interceptors/token/token.interceptor';
-import { TokenService } from '../token/token.service';
+import { environment } from '@environments/environment';
+
+import { generateManyProducts, generateOneProduct } from '@testing/mock';
+import { CreateProductDTO, Product, UpdateProductDTO } from '@shared/interfaces';
+import { tokenInterceptor } from '@core/interceptors';
+import { TokenService } from '@core/services';
 
 describe('ProductsService', () => {
   let service: ProductsService;

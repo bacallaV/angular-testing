@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import * as Testing from '../../testing';
+import * as Testing from '@testing/index';
 
 import { HighlightDirective } from './highlight.directive';
 
