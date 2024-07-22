@@ -106,7 +106,12 @@
           I agree to the Terms and Conditions
         </label>
       </fieldset>
-      <button type="submit">Register</button>
+
+      <button
+        type="submit"
+        [disabled]="status === 'loading'">
+        Register
+      </button>
     </div>
   </form>
 </section>

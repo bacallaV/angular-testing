@@ -20,12 +20,19 @@ export function inputData<T>(fixture: ComponentFixture<T>, selector: string, val
 
   if(!inputDe) throw new Error(`inputData(): ${selector} input element not found`);
 
-  if (typeof value === 'string')
-    (inputDe.nativeElement as HTMLInputElement).value = value;
-  else if (typeof value === 'boolean')
-    (inputDe.nativeElement as HTMLInputElement).checked = true;
+  const inputElement: HTMLInputElement = inputDe.nativeElement;
+  let event: Event;
 
-  (inputDe.nativeElement as HTMLInputElement).dispatchEvent(new Event('input'));
+  if (typeof value === 'string') {
+    inputElement.value = value;
+    event = new Event('input');
+  }
+  else {
+    inputElement.checked = true;
+    event = new Event('change');
+  }
+
+  inputElement.dispatchEvent(event);
 }
 
 export function dispatchEvent<T>(fixture: ComponentFixture<T>, selector: string, eventName: string): void {

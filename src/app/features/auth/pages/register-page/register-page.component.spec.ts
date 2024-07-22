@@ -1,9 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { RegisterPageComponent } from './register-page.component';
 
 import * as Testing from '@testing/index';
 import { UserService } from '@core/services';
+import { generateOneCustomer } from '@testing/mock';
+import { of } from 'rxjs';
 
 fdescribe('RegisterPageComponent', () => {
   let component: RegisterPageComponent;
@@ -154,5 +156,122 @@ fdescribe('RegisterPageComponent', () => {
         .withContext('terms input with aria-invalid')
         .toBe('true');
     });
+  });
+
+  describe('Form sending', () => {
+    it('should send form successfully', () => {
+      // Arrange
+      const userMock = generateOneCustomer();
+      component.form.patchValue({
+        name: userMock.name,
+        email: userMock.email,
+        password: userMock.password,
+        confirmPassword: userMock.password,
+        checkTerms: true,
+      });
+      userService.create.and.returnValue(of(userMock));
+
+      // Act
+      component.register(new Event('submit'));
+
+      // Assert
+      expect(component.form.valid).toBeTrue();
+      expect(userService.create).toHaveBeenCalled();
+    });
+
+    it('should change status when form sent successfully', fakeAsync(() => {
+      // Arrange
+      const userMock = generateOneCustomer();
+      component.form.patchValue({
+        name: userMock.name,
+        email: userMock.email,
+        password: userMock.password,
+        confirmPassword: userMock.password,
+        checkTerms: true,
+      });
+      userService.create.and.returnValue(
+        Testing.deferredResolve(userMock)
+      );
+
+      expect(component.status).toEqual('initial');
+
+      // Act
+      component.register(new Event('submit'));
+      fixture.detectChanges();
+
+      expect(component.status).toEqual('loading');
+
+      tick();
+      // Assert
+      expect(component.form.valid).toBeTrue();
+      expect(userService.create).toHaveBeenCalled();
+      expect(component.status).toEqual('success');
+    }));
+
+    it('should change status when form sent successfully with UI', fakeAsync(() => {
+      // Arrange
+      const userMock = generateOneCustomer();
+      userService.create.and.returnValue(
+        Testing.deferredResolve(userMock)
+      );
+      // UI form input information
+      Testing.inputData(fixture, 'input#name', userMock.name);
+      Testing.inputData(fixture, 'input#email', userMock.email);
+      Testing.inputData(fixture, 'input#password', userMock.password);
+      Testing.inputData(fixture, 'input#confirmPassword', userMock.password);
+      Testing.inputData(fixture, 'input#terms', true);
+      const form = Testing.queryByCSS(fixture, 'form');
+      const submitButton = Testing.queryByCSS(fixture, 'button[type="submit"]');
+
+      expect(component.status).toEqual('initial');
+      expect(submitButton.attributes['disabled']).toBeFalsy();
+
+      // Act
+      form.triggerEventHandler('ngSubmit', new Event('submit'));
+      fixture.detectChanges();
+
+      expect(component.status).toEqual('loading');
+      expect(submitButton.attributes['disabled']).toEqual('');
+
+      tick();
+      // Assert
+      expect(component.form.valid).toBeTrue();
+      expect(userService.create).toHaveBeenCalled();
+      expect(component.status).toEqual('success');
+      expect(submitButton.attributes['disabled']).toBeFalsy();
+    }));
+
+    it('should change status when form send failed with UI', fakeAsync(() => {
+      // Arrange
+      const userMock = generateOneCustomer();
+      userService.create.and.returnValue(
+        Testing.deferredReject('Backend error')
+      );
+      // UI form input information
+      Testing.inputData(fixture, 'input#name', userMock.name);
+      Testing.inputData(fixture, 'input#email', userMock.email);
+      Testing.inputData(fixture, 'input#password', userMock.password);
+      Testing.inputData(fixture, 'input#confirmPassword', userMock.password);
+      Testing.inputData(fixture, 'input#terms', true);
+      const form = Testing.queryByCSS(fixture, 'form');
+      const submitButton = Testing.queryByCSS(fixture, 'button[type="submit"]');
+
+      expect(component.status).toEqual('initial');
+      expect(submitButton.attributes['disabled']).toBeFalsy();
+
+      // Act
+      form.triggerEventHandler('ngSubmit', new Event('submit'));
+      fixture.detectChanges();
+
+      expect(component.status).toEqual('loading');
+      expect(submitButton.attributes['disabled']).toEqual('');
+
+      tick();
+      // Assert
+      expect(component.form.valid).toBeTrue();
+      expect(userService.create).toHaveBeenCalled();
+      expect(component.status).toEqual('failed');
+      expect(submitButton.attributes['disabled']).toBeFalsy();
+    }));
   });
 });

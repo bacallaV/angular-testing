@@ -13,6 +13,7 @@ import { UserService } from '@core/services';
 })
 export class RegisterPageComponent {
   public form: FormGroup;
+  public status: 'initial' | 'loading' | 'success' | 'failed';
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -30,6 +31,7 @@ export class RegisterPageComponent {
         validators: MyValidators.matchPasswords,
       }
     );
+    this.status = 'initial';
   }
 
   public register(event: Event): void {
@@ -39,13 +41,18 @@ export class RegisterPageComponent {
       return;
     }
 
-    const value = this.form.value;
+    this.status = 'loading';
+
     this.userService.create({
-      ...value,
+      ... this.form.value,
       avatar: 'https://i.pravatar.cc/150?img=1',
     }).subscribe({
-      next: () => {},
-      error: () => {},
+      next: () => {
+        this.status = 'success';
+      },
+      error: () => {
+        this.status = 'failed';
+      },
     });
   }
 
