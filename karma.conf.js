@@ -45,7 +45,7 @@ module.exports = function (config) {
     mochaReporter: {
       ignoreSkipped: true,
       colors: {
-        success: 'green',
+        success: 'bgGreen',
         info: 'bgBlue',
         warning: 'bgOrange',
         error: 'bgRed'
