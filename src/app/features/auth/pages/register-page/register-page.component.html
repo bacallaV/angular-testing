@@ -42,6 +42,9 @@
             @else if(emailField.hasError('email')) {
               <small>*It's not a email</small>
             }
+            @else if(emailField.hasError('not_available')) {
+              <small>*Email unavailable</small>
+            }
           }
         </label>
       </div>
