@@ -13,7 +13,7 @@ describe('RegisterPageComponent', () => {
   let userService: jasmine.SpyObj<UserService>;
 
   beforeEach(async () => {
-    userService = jasmine.createSpyObj('UserService', ['create']);
+    userService = jasmine.createSpyObj('UserService', ['create', 'checkEmailAvailability']);
 
     await TestBed.configureTestingModule({
       imports: [RegisterPageComponent],
@@ -22,6 +22,10 @@ describe('RegisterPageComponent', () => {
       ],
     })
     .compileComponents();
+
+    userService.checkEmailAvailability.and.returnValue(
+      of({ isAvailable: true }),
+    );
 
     fixture = TestBed.createComponent(RegisterPageComponent);
     component = fixture.componentInstance;
@@ -80,6 +84,35 @@ describe('RegisterPageComponent', () => {
         .withContext('email input with aria-invalid')
         .toContain('true');
     });
+
+    it('should #email field have unavailable error with UI', fakeAsync(() => {
+      userService.checkEmailAvailability.and.returnValue(
+        of({ isAvailable: false })
+      );
+      const testEmail = 'test@example.com';
+      const inputElement = Testing.queryByCSS(fixture, 'input#email');
+
+      Testing.inputData(fixture, 'input#email', testEmail);
+      fixture.detectChanges();
+      tick(500);
+
+      expect(userService.checkEmailAvailability).toHaveBeenCalledOnceWith(testEmail);
+      expect(component.emailField.invalid).withContext('email form field invalid').toBeTrue();
+
+      const inputErrDE = Testing.queryByCSS(fixture, 'input#email + small');
+      expect(inputErrDE).withContext('error displayed in view').toBeFalsy();
+
+      Testing.dispatchEvent(fixture, 'input#email', 'blur');
+      fixture.detectChanges();
+
+      const inputErrTextContent = Testing.getTextByCSSQuery(fixture, 'input#email + small');
+      expect(inputErrTextContent)
+        .withContext('corresponding error in view')
+        .toContain('unavailable');
+      expect(inputElement.attributes['aria-invalid'])
+        .withContext('email input with aria-invalid')
+        .toContain('true');
+    }));
 
     it('should #password field be invalid with UI', () => {
       const inputDE = Testing.queryByCSS(fixture, 'input#password');
@@ -159,7 +192,7 @@ describe('RegisterPageComponent', () => {
   });
 
   describe('Form sending', () => {
-    it('should send form successfully', () => {
+    it('should send form successfully', async () => {
       // Arrange
       const userMock = generateOneCustomer();
       component.form.patchValue({
@@ -171,8 +204,11 @@ describe('RegisterPageComponent', () => {
       });
       userService.create.and.returnValue(of(userMock));
 
+      await new Promise(r => setTimeout(r, 2000)); // Debounce async validation
+
       // Act
       component.register(new Event('submit'));
+      fixture.detectChanges();
 
       // Assert
       expect(component.form.valid).toBeTrue();
@@ -193,11 +229,12 @@ describe('RegisterPageComponent', () => {
         Testing.deferredResolve(userMock)
       );
 
-      expect(component.status).toEqual('initial');
+      tick(500); // Due to debounce delay
+
+      expect(component.status).withContext('initial state').toEqual('initial');
 
       // Act
       component.register(new Event('submit'));
-      fixture.detectChanges();
 
       expect(component.status).toEqual('loading');
 
@@ -222,6 +259,8 @@ describe('RegisterPageComponent', () => {
       Testing.inputData(fixture, 'input#terms', true);
       const form = Testing.queryByCSS(fixture, 'form');
       const submitButton = Testing.queryByCSS(fixture, 'button[type="submit"]');
+
+      tick(500); // Due to debounce delay
 
       expect(component.status).toEqual('initial');
       expect(submitButton.attributes['disabled']).toBeFalsy();
@@ -255,6 +294,8 @@ describe('RegisterPageComponent', () => {
       Testing.inputData(fixture, 'input#terms', true);
       const form = Testing.queryByCSS(fixture, 'form');
       const submitButton = Testing.queryByCSS(fixture, 'button[type="submit"]');
+
+      tick(500); // Due to debounce delay
 
       expect(component.status).toEqual('initial');
       expect(submitButton.attributes['disabled']).toBeFalsy();

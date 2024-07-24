@@ -1,6 +1,6 @@
 import { AbstractControl } from '@angular/forms';
 import { UserService } from '@core/services';
-import { debounceTime, map, Observable, switchMap } from 'rxjs';
+import { debounceTime, map, Observable, switchMap, take } from 'rxjs';
 
 export class MyValidators {
 
@@ -54,7 +54,8 @@ export class MyValidators {
           };
 
           return null;
-        })
+        }),
+        take(1),
       );
     };
   }

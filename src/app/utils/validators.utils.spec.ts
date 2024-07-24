@@ -4,7 +4,7 @@ import { UserService } from '@core/services';
 import { of } from 'rxjs';
 import { fakeAsync, tick } from '@angular/core/testing';
 
-fdescribe('MyValidators', () => {
+describe('MyValidators', () => {
   describe('#isPriceValid', () => {
     it('should return null', () => {
       const formControl1 = new FormControl(10000);
