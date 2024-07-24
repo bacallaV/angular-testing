@@ -7,7 +7,7 @@ import { UserService } from '@core/services';
 import { generateOneCustomer } from '@testing/mock';
 import { of } from 'rxjs';
 
-fdescribe('RegisterPageComponent', () => {
+describe('RegisterPageComponent', () => {
   let component: RegisterPageComponent;
   let fixture: ComponentFixture<RegisterPageComponent>;
   let userService: jasmine.SpyObj<UserService>;

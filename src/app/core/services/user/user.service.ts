@@ -23,4 +23,10 @@ export class UserService {
   public getAll(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }
+
+  public checkEmailAvailability(email: string): Observable<{isAvailable: boolean}> {
+    return this.http.post<{isAvailable: boolean}>(`${this.apiUrl}/is-available`, {
+      email
+    });
+  }
 }
