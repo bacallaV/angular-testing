@@ -43,8 +43,9 @@ module.exports = function (config) {
     },
     reporters: ['mocha', 'progress', 'kjhtml'],
     mochaReporter: {
+      ignoreSkipped: true,
       colors: {
-        success: 'green',
+        success: 'bgGreen',
         info: 'bgBlue',
         warning: 'bgOrange',
         error: 'bgRed'

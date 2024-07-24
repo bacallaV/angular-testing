@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { ProductsService } from '../../services/products/products.service';
+import { ProductsService } from '@core/services';
 
-import { Product } from '../../interfaces/product.interface';
+import { Product } from '@shared/interfaces';
 import { CommonModule } from '@angular/common';
-import { ProductComponent } from '../../components/product/product.component';
+import { ProductComponent } from '@shared/components';
 
 @Component({
   selector: 'app-products',

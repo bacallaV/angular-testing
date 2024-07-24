@@ -4,6 +4,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { PicoPreviewComponent } from './pages/pico-preview/pico-preview.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { HighlightComponent } from './pages/highlight/highlight.component';
+/* Routes */
+import { routesAuth } from './features/auth/auth.routes';
 
 export const routes: Routes = [
   {
@@ -22,4 +24,8 @@ export const routes: Routes = [
     path: 'highlight-directive',
     component: HighlightComponent,
   },
+  {
+    path: 'auth',
+    children: routesAuth,
+  }
 ];

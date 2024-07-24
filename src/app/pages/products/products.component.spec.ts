@@ -1,23 +1,20 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { defer, of } from 'rxjs';
+import * as Testing from '@testing/index';
 
 import { ProductsComponent } from './products.component';
-import { ProductsService } from '../../services/products/products.service';
-import { generateManyProducts } from '../../interfaces/product.mock';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { ProductsService } from '@core/services';
+import { generateManyProducts } from '@testing/mock';
 
 describe('ProductsComponent', () => {
   let component: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productsService: jasmine.SpyObj<ProductsService>;
-  let buttonEl: DebugElement;
 
   beforeEach(() => {
     productsService = jasmine.createSpyObj('ProductsService', ['getAll']);
     const mockProducts = generateManyProducts(10);
-    productsService.getAll.and.returnValue( of(mockProducts) );
+    productsService.getAll.and.returnValue( Testing.mockObservable(mockProducts) );
 
     TestBed.configureTestingModule({
       imports: [ProductsComponent],
@@ -29,8 +26,6 @@ describe('ProductsComponent', () => {
     fixture = TestBed.createComponent(ProductsComponent);
     fixture.autoDetectChanges();
     component = fixture.componentInstance;
-
-    buttonEl = fixture.debugElement.query(By.css('button'));
   });
 
   it('should create', () => {
@@ -48,7 +43,7 @@ describe('ProductsComponent', () => {
       // Arrange
       const productsMock = generateManyProducts(10);
       productsService.getAll.and.returnValue(
-        defer( () => Promise.resolve(productsMock) ),
+        Testing.deferredResolve(productsMock)
       );
 
       // Act
@@ -67,7 +62,7 @@ describe('ProductsComponent', () => {
     it('should should change status from "loading" to "no-more-products"', fakeAsync(() => {
       // Arrange
       productsService.getAll.and.returnValue(
-        defer( () => Promise.resolve([]) ),
+        Testing.deferredResolve([])
       );
 
       // Act
@@ -84,7 +79,7 @@ describe('ProductsComponent', () => {
     it('should should change status from "loading" to "error"', fakeAsync(() => {
       // Arrange
       productsService.getAll.and.returnValue(
-        defer( () => Promise.reject('Error') ),
+        Testing.deferredReject('Error')
       );
 
       // Act
@@ -102,12 +97,11 @@ describe('ProductsComponent', () => {
       // Arrange
       const productsMock = generateManyProducts(10);
       productsService.getAll.and.returnValue(
-        defer( () => Promise.resolve(productsMock) ),
+        Testing.deferredResolve(productsMock)
       );
-      buttonEl = fixture.debugElement.query(By.css('.btn-primary'));
 
       // Act
-      buttonEl.triggerEventHandler('click');
+      Testing.clickEvent(fixture, '.btn-primary');
 
       expect(component.status).toEqual('loading');
 
@@ -117,7 +111,7 @@ describe('ProductsComponent', () => {
       // Assert
       expect(component.status).toEqual('success');
 
-      const productEls = fixture.debugElement.queryAll(By.css('app-product'));
+      const productEls = Testing.queryAllByCSS(fixture, 'app-product');
       expect(productEls.length).toEqual(component.products.length);
     }));
   });
